@@ -1,0 +1,51 @@
+#pragma once
+
+enum class KEY_TYPE //키 맵핑
+{
+	UP = VK_UP,
+	DOWN = VK_DOWN,
+	LEFT = VK_LEFT,
+	RIGHT = VK_RIGHT,
+
+	W = 'W',
+	A = 'A',
+	S = 'S',
+	D = 'D',
+};
+
+enum class KEY_STATE //키 입력 상태
+{
+	NONE,
+	PRESS, //처음으로 누른상태
+	DOWN, //누르고 있는상태
+	UP,
+	END
+};
+
+enum
+{
+	KEY_TYPE_COUNT = static_cast<int32>(UINT8_MAX),
+	KEY_STATE_COUNT = static_cast<int32>(KEY_STATE::END),
+};
+
+class Input
+{
+public:
+	void Init(HWND hwnd);
+	void Update();
+
+	// 누르고 있을 때
+	bool GetButton(KEY_TYPE key) { return GetState(key) == KEY_STATE::PRESS; }
+	// 맨 처음 눌렀을 때
+	bool GetButtonDown(KEY_TYPE key) { return GetState(key) == KEY_STATE::DOWN; }
+	// 맨 처음 눌렀다 뗐을 때
+	bool GetButtonUp(KEY_TYPE key) { return GetState(key) == KEY_STATE::UP; }
+
+private:
+	inline KEY_STATE GetState(KEY_TYPE key) { return _states[static_cast<uint8>(key)]; }
+
+private:
+	HWND _hwnd;
+	vector<KEY_STATE> _states;
+};
+
