@@ -19,8 +19,8 @@ void Input::Update()
 		return;
 	}
 
-	BYTE asciiKeys[KEY_TYPE_COUNT] = {};
-	if (::GetKeyboardState(asciiKeys) == false)
+	BYTE asciiKeys[KEY_TYPE_COUNT] = {}; //256개짜리 BYTE배열 초기화
+	if (::GetKeyboardState(asciiKeys) == false) //highorder비트가 1이면 눌린상태
 		return;
 
 	for (uint32 key = 0; key < KEY_TYPE_COUNT; key++)

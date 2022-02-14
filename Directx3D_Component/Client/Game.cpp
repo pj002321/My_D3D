@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "Game.h"
 #include "Engine.h"
+#include "Material.h"
 
+// Material : 따로따로 관리하는것이 아닌 유닛들을 싹다 관리하는 방식
 shared_ptr<Mesh> mesh = make_shared<Mesh>();
-shared_ptr<Shader> shader = make_shared<Shader>();
-shared_ptr<Texture> texture = make_shared<Texture>();
 
 void Game::Init(const WindowInfo& info)
 {
@@ -38,9 +38,19 @@ void Game::Init(const WindowInfo& info)
 
 	mesh->Init(vec, indexVec);
 
-	shader->Init(L"..\\Resources\\Shader\\default.hlsli");
+	shared_ptr<Shader> shader = make_shared<Shader>();
+	shared_ptr<Texture> texture = make_shared<Texture>();
 
+	shader->Init(L"..\\Resources\\Shader\\default.hlsli");
 	texture->Init(L"..\\Resources\\Texture\\veigar.jpg");
+
+	shared_ptr<Material> material = make_shared<Material>();
+	material->SetShader(shader);
+	material->SetFloat(0,0.3f);
+	material->SetFloat(1,0.2f);
+	material->SetFloat(2,0.4f);
+	material->SetTexture(0,texture);
+	mesh->SetMaterial(material);
 
 	GEngine->GetCmdQueue()->WaitSync();
 }
@@ -51,7 +61,7 @@ void Game::Update()
 
 	GEngine->RenderBegin();
 
-	shader->Update();
+	
 
 	{
 		static Transform t = {};
@@ -67,20 +77,9 @@ void Game::Update()
 
 		mesh->SetTransform(t);
 
-		mesh->SetTexture(texture);
-
-		mesh->Render();
+		mesh->Render(); //material update
 	}
 
-	/*{
-		Transform t;
-		t.offset = Vec4(0.f, 0.f, 0.3f, 0.f);
-		mesh->SetTransform(t);
-
-		mesh->SetTexture(texture);
-
-		mesh->Render();
-	}*/	
 
 	GEngine->RenderEnd();
 }
