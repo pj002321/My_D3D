@@ -16,15 +16,15 @@ enum class KEY_TYPE //키 맵핑
 enum class KEY_STATE //키 입력 상태
 {
 	NONE,
-	PRESS, //처음으로 누른상태
-	DOWN, //누르고 있는상태
+	PRESS, 
+	DOWN, 
 	UP,
 	END
 };
 
 enum
 {
-	KEY_TYPE_COUNT = static_cast<int32>(UINT8_MAX),
+	KEY_TYPE_COUNT = static_cast<int32>(UINT8_MAX+1),
 	KEY_STATE_COUNT = static_cast<int32>(KEY_STATE::END),
 };
 
