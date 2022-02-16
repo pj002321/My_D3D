@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Engine.h"
 #include "Material.h"
+#include "Transform.h"
 
 void Engine::Init(const WindowInfo& info)
 {
@@ -20,7 +21,7 @@ void Engine::Init(const WindowInfo& info)
 	_input->Init(info.hwnd);
 	_timer->Init();
 
-	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(Transform), 256);
+	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformMatrix), 256);
 	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(MaterialParams), 256);
 
 	ResizeWindow(info.width, info.height);
@@ -35,12 +36,17 @@ void Engine::Render()
 	RenderEnd();
 }
 
-void Engine::Update() // 매프레임마다 갱신해줘야 할것들
+void Engine::Update()
 {
 	_input->Update();
 	_timer->Update();
 
 	ShowFps();
+}
+
+void Engine::LateUpdate()
+{
+	// TODO
 }
 
 void Engine::RenderBegin()
@@ -65,7 +71,7 @@ void Engine::ResizeWindow(int32 width, int32 height)
 	_depthStencilBuffer->Init(_window);
 }
 
-void Engine::ShowFps() //FPS 출력
+void Engine::ShowFps()
 {
 	uint32 fps = _timer->GetFps();
 
